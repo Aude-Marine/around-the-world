@@ -21,7 +21,7 @@ class ClientArea {
     // communicate with the cloud function
     // we could use the web browser fetch API functionnality to send off and asynchronous request 
     // here we use Axios
-    Axios.post('https://pensive-rosalind-383c21.netlify.com/.netlify/functions/secret-area', {
+    Axios.post('https://clear-view-escape.netlify.com/.netlify/functions/secret-area', {
       password: this.field.value
     }).then(response => {
       this.form.remove()
