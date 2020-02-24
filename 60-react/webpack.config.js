@@ -10,14 +10,14 @@ const postCSSPlugins = [
   require('postcss-mixins'),
   require('postcss-simple-vars'),
   require('postcss-nested'),
-  //require('postcss-hexrgba'),
+  require('postcss-hexrgba'),
   require('autoprefixer')
 ]
 
 class RunAfterCompile {
   apply(compiler) {
     compiler.hooks.done.tap('Copy images', function() {
-      fse.copySync('./app/assets/images', './dist/assets/images')
+      fse.copySync('./app/assets/images', './docs/assets/images')
     })
   }
 }
@@ -41,7 +41,17 @@ let config = {
   plugins: pages,
   module: {
     rules: [
-      cssConfig
+      cssConfig,
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-react', '@babel/preset-env']
+          }
+        }
+      }
     ]
   }
 }
@@ -65,23 +75,12 @@ if (currentTask == 'dev') {
 }
 
 if (currentTask == 'build') {
-  config.module.rules.push({
-    test: /\.js$/,
-    exclude: /(node_modules)/,
-    use: {
-      loader: 'babel-loader',
-      options: {
-        presets: ['@babel/preset-env']
-      }
-    }
-  })
-
   cssConfig.use.unshift(MiniCssExtractPlugin.loader)
   postCSSPlugins.push(require('cssnano'))
   config.output = {
     filename: '[name].[chunkhash].js',
     chunkFilename: '[name].[chunkhash].js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'docs')
   }
   config.mode = 'production'
   config.optimization = {

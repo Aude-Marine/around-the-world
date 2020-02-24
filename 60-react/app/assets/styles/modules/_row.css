@@ -1,11 +1,6 @@
 .row {
 
-  /*@mixin clearfix;*/
-  &::after {
-    content: "";
-    clear: both;
-    display: table;
-  }
+  @mixin clearfix;
 
   &--t-padding {
     padding-top: 80px;
@@ -125,4 +120,5 @@
     }
 
   }
+
 }
